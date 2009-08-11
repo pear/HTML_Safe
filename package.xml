@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.4.5" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+ <name>HTML_Safe</name>
+ <channel>pear.php.net</channel>
+ <summary>This parser strips down all potentially dangerous content within HTML</summary>
+ <description>This parser strips down all potentially dangerous content within HTML</description>
+ <lead>
+  <name>Roman Ivanov</name>
+  <user>thingol</user>
+  <email>thingol@mail.ru</email>
+  <active>yes</active>
+ </lead>
+ <lead>
+  <name>Evgeny Stepanischev</name>
+  <user>bolk</user>
+  <email>bolk@lixil.ru</email>
+  <active>yes</active>
+ </lead>
+ <date>2005-12-21</date>
+ <time>11:24:11</time>
+ <version>
+  <release>0.9.9beta</release>
+  <api>0.9.9beta</api>
+ </version>
+ <stability>
+  <release>beta</release>
+  <api>beta</api>
+ </stability>
+ <license>BSD (3 Clause)</license>
+ <notes>* Added &apos;dl&apos; to the list of &apos;lists&apos; tags.
+* Added &apos;callto&apos; to the white list of protocols.
+* Added white list of &quot;namespaced&quot; attributes.</notes>
+ <contents>
+  <dir name="/">
+   <file baseinstalldir="/HTML/Safe" md5sum="f7a5649b068abbb01cef98e6b9a47f8a" name="docs/examples/HTML_Safe_example.php" role="doc" />
+   <file baseinstalldir="/HTML/Safe" md5sum="5bdeb7ab5474ab86389716053fbee2b9" name="docs/readme.txt" role="doc" />
+   <file baseinstalldir="/HTML" md5sum="62659e335df889bc0274eed8625df3de" name="Safe.php" role="php" />
+  </dir>
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>4.1.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.0b1</min>
+   </pearinstaller>
+   <package>
+    <name>XML_HTMLSax3</name>
+    <channel>pear.php.net</channel>
+    <min>3.0.0RC1</min>
+   </package>
+  </required>
+ </dependencies>
+ <phprelease />
+</package>
