@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package packagerversion="1.4.5" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+<package packagerversion="1.8.1" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
  <name>HTML_Safe</name>
  <channel>pear.php.net</channel>
  <summary>This parser strips down all potentially dangerous content within HTML</summary>
@@ -8,16 +8,16 @@
   <name>Roman Ivanov</name>
   <user>thingol</user>
   <email>thingol@mail.ru</email>
-  <active>yes</active>
+  <active>no</active>
  </lead>
  <lead>
   <name>Evgeny Stepanischev</name>
   <user>bolk</user>
   <email>bolk@lixil.ru</email>
-  <active>yes</active>
+  <active>no</active>
  </lead>
- <date>2005-12-21</date>
- <time>11:24:11</time>
+ <date>2009-08-11</date>
+ <time>00:59:30</time>
  <version>
   <release>0.9.9beta</release>
   <api>0.9.9beta</api>
@@ -27,14 +27,18 @@
   <api>beta</api>
  </stability>
  <license>BSD (3 Clause)</license>
- <notes>* Added &apos;dl&apos; to the list of &apos;lists&apos; tags.
+ <notes>
+* Added &apos;dl&apos; to the list of &apos;lists&apos; tags.
 * Added &apos;callto&apos; to the white list of protocols.
-* Added white list of &quot;namespaced&quot; attributes.</notes>
+* Added white list of &quot;namespaced&quot; attributes.
+ </notes>
  <contents>
-  <dir name="/">
-   <file baseinstalldir="/HTML/Safe" md5sum="f7a5649b068abbb01cef98e6b9a47f8a" name="docs/examples/HTML_Safe_example.php" role="doc" />
-   <file baseinstalldir="/HTML/Safe" md5sum="5bdeb7ab5474ab86389716053fbee2b9" name="docs/readme.txt" role="doc" />
-   <file baseinstalldir="/HTML" md5sum="62659e335df889bc0274eed8625df3de" name="Safe.php" role="php" />
+  <dir baseinstalldir="/" name="/">
+   <file baseinstalldir="/" md5sum="5bdeb7ab5474ab86389716053fbee2b9" name="docs/readme.txt" role="doc" />
+   <file baseinstalldir="/" md5sum="f7a5649b068abbb01cef98e6b9a47f8a" name="docs/examples/HTML_Safe_example.php" role="doc" />
+   <file baseinstalldir="/" md5sum="6c5dbc638e7a8416d56a8ee6e485fff0" name="HTML/Safe.php" role="php" />
+   <file baseinstalldir="/" md5sum="1c54d1eeb92a98c1bf1aa3074bfd99d5" name="tests/AllTests.php" role="test" />
+   <file baseinstalldir="/" md5sum="6f1fdcf8dbb68e213e98378390ab73aa" name="tests/HTML_SafeTest.php" role="test" />
   </dir>
  </contents>
  <dependencies>
@@ -53,4 +57,23 @@
   </required>
  </dependencies>
  <phprelease />
+ <changelog>
+  <release>
+   <version>
+    <release>0.9.9beta</release>
+    <api>0.9.9beta</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2009-08-11</date>
+   <license>BSD (3 Clause)</license>
+   <notes>
+* Added &apos;dl&apos; to the list of &apos;lists&apos; tags.
+* Added &apos;callto&apos; to the white list of protocols.
+* Added white list of &quot;namespaced&quot; attributes.
+   </notes>
+  </release>
+ </changelog>
 </package>
