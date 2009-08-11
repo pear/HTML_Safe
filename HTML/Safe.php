@@ -552,6 +552,27 @@ class HTML_Safe
     {
         return true;
     }
+    /**
+     * Allow tags
+     *
+     * Example:
+     * <pre>
+     * $safe = new HTML_Safe;
+     * $safe->setAllowTags(array('body'));
+     * </pre>
+     *
+     * @param array $tags Tags to allow
+     *
+     * @return void
+     */
+    public function setAllowTags($tags = array())
+    {
+        if (is_array($tags)) {
+            $this->_allowTags = $tags;
+        }
+    }
+ 
+
 
     /**
      * Returns the XHTML document

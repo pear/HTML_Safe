@@ -1,7 +1,11 @@
 <?php
 require_once 'PHPUnit/Framework/TestCase.php';
 
+require_once 'HTML/Safe.php';
+
 class HTML_SafeTest extends PHPUnit_Framework_TestCase {
+
+
     public function testShouldParseCorrectly() {
         $this->markTestIncomplete("Implement test coverage of parse() under a number of scenarios");
         /*
@@ -19,5 +23,14 @@ class HTML_SafeTest extends PHPUnit_Framework_TestCase {
         function repackUTF7Back($str)
         function repackUTF7Callback($str)
         */
+    }
+
+    public function testShouldRespectAllowTags() {
+        $input = '<html><body><p>my text</p></body></html>'; 
+        $expected = '<body><p>my text</p></body>';
+
+        $safe = new HTML_Safe();
+        $safe->setAllowTags(array('body'));
+        $this->assertSame($expected, $safe->parse($input)); 
     }
 }
