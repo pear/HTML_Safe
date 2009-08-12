@@ -125,19 +125,19 @@ class HTML_Safe
      *
      * @var array
      */
-    var $singleTags = array('area', 'br', 'img', 'input', 'hr', 'wbr', );
+    public $singleTags = array('area', 'br', 'img', 'input', 'hr', 'wbr', );
 
     /**
      * List of dangerous tags (such tags will be deleted)
      *
      * @var array
      */
-    var $deleteTags = array(
+    public $deleteTags = array(
         'applet', 'base',   'basefont', 'bgsound', 'blink',  'body',
         'embed',  'frame',  'frameset', 'head',    'html',   'ilayer',
         'iframe', 'layer',  'link',     'meta',    'object', 'style',
         'title',  'script',
-        );
+    );
 
     /**
      * List of dangerous tags (such tags will be deleted, and all content
@@ -145,47 +145,47 @@ class HTML_Safe
      *
      * @var array
      */
-    var $deleteTagsContent = array('script', 'style', 'title', 'xml', );
+    public $deleteTagsContent = array('script', 'style', 'title', 'xml', );
 
     /**
      * Type of protocols filtering ('white' or 'black')
      *
      * @var string
      */
-    var $protocolFiltering = 'white';
+    public $protocolFiltering = 'white';
 
     /**
      * List of "dangerous" protocols (used for blacklist-filtering)
      *
      * @var array
      */
-    var $blackProtocols = array(
+    public $blackProtocols = array(
         'about',   'chrome',     'data',       'disk',     'hcp',
         'help',    'javascript', 'livescript', 'lynxcgi',  'lynxexec',
         'ms-help', 'ms-its',     'mhtml',      'mocha',    'opera',
         'res',     'resource',   'shell',      'vbscript', 'view-source',
         'vnd.ms.radio',          'wysiwyg',
-        );
+    );
 
     /**
      * List of "safe" protocols (used for whitelist-filtering)
      *
      * @var array
      */
-    var $whiteProtocols = array(
+    public $whiteProtocols = array(
         'ed2k',   'file', 'ftp',  'gopher', 'http',  'https',
         'irc',    'mailto', 'news', 'nntp', 'telnet', 'webcal',
         'xmpp',   'callto',
-        );
+    );
 
     /**
      * List of attributes that can contain protocols
      *
      * @var array
      */
-    var $protocolAttributes = array(
+    public $protocolAttributes = array(
         'action', 'background', 'codebase', 'dynsrc', 'href', 'lowsrc', 'src',
-        );
+    );
 
     /**
      * List of dangerous CSS keywords
@@ -195,10 +195,10 @@ class HTML_Safe
      *
      * @var array
      */
-    var $cssKeywords = array(
+    public $cssKeywords = array(
         'absolute', 'behavior',       'behaviour',   'content', 'expression',
         'fixed',    'include-source', 'moz-binding',
-        );
+    );
 
     /**
      * List of tags that can have no "closing tag"
@@ -206,7 +206,7 @@ class HTML_Safe
      * @var array
      * @deprecated XHTML does not allow such tags
      */
-    var $noClose = array();
+    public $noClose = array();
 
     /**
      * List of block-level tags that terminates paragraph
@@ -215,51 +215,51 @@ class HTML_Safe
      *
      * @var array
      */
-    var $closeParagraph = array(
+    public $closeParagraph = array(
         'address', 'blockquote', 'center', 'dd',      'dir',       'div',
         'dl',      'dt',         'h1',     'h2',      'h3',        'h4',
         'h5',      'h6',         'hr',     'isindex', 'listing',   'marquee',
         'menu',    'multicol',   'ol',     'p',       'plaintext', 'pre',
         'table',   'ul',         'xmp',
-        );
+    );
 
     /**
      * List of table tags, all table tags outside a table will be removed
      *
      * @var array
      */
-    var $tableTags = array(
+    public $tableTags = array(
         'caption', 'col', 'colgroup', 'tbody', 'td', 'tfoot', 'th',
         'thead',   'tr',
-        );
+    );
 
     /**
      * List of list tags
      *
      * @var array
      */
-    var $listTags = array('dir', 'menu', 'ol', 'ul', 'dl', );
+    public $listTags = array('dir', 'menu', 'ol', 'ul', 'dl', );
 
     /**
      * List of dangerous attributes
      *
      * @var array
      */
-    var $attributes = array('dynsrc', 'id', 'name', );
+    public $attributes = array('dynsrc', 'id', 'name', );
 
     /**
      * List of allowed "namespaced" attributes
      *
      * @var array
      */
-    var $attributesNS = array('xml:lang', );
+    public $attributesNS = array('xml:lang', );
 
     /**
      * Constructs class
      *
      * @access public
      */
-    function HTML_Safe()
+    public function __construct()
     {
         //making regular expressions based on Proto & CSS arrays
         foreach ($this->blackProtocols as $proto) {
@@ -555,7 +555,7 @@ class HTML_Safe
      *
      * @return string Processed (X)HTML document
      */
-    function getXHTML ()
+    public function getXHTML()
     {
         while ($tag = array_pop($this->_stack)) {
             $this->_closeTag($tag);
@@ -569,7 +569,7 @@ class HTML_Safe
      *
      * @return boolean
      */
-    function clear()
+    public function clear()
     {
         $this->_xhtml = '';
         return true;
@@ -582,7 +582,7 @@ class HTML_Safe
      *
      * @return string Processed (X)HTML document
      */
-    function parse($doc)
+    public function parse($doc)
     {
 
        // Save all '<' symbols
