@@ -4,26 +4,24 @@
 /**
  * HTML_Safe Parser
  *
- * PHP versions 4 and 5
+ * PHP version 5
  *
- * @category   HTML
- * @package    HTML_Safe
- * @author     Roman Ivanov <thingol@mail.ru>
- * @copyright  2004-2005 Roman Ivanov
- * @license    http://www.debian.org/misc/bsd.license  BSD License (3 Clause)
- * @version    CVS: $Id:$
- * @link       http://pear.php.net/package/HTML_Safe
+ * @category  HTML
+ * @package   HTML_Safe
+ * @author    Roman Ivanov <thingol@mail.ru>
+ * @author    Miguel Vazquez Gocobachi <demrit@mx.gnu.org>
+ * @copyright 2004-2009 Roman Ivanov, Miguel Vazquez Gocobachi
+ * @license   http://www.debian.org/misc/bsd.license  BSD License (3 Clause)
+ * @version   CVS: $Id:$
+ * @link      http://pear.php.net/package/HTML_Safe
  */
-
 
 /**
  * This package requires HTMLSax3 package
  */
 require_once 'XML/HTMLSax3.php';
 
-
 /**
- *
  * HTML_Safe Parser
  *
  * This parser strips down all potentially dangerous content within HTML:
@@ -43,17 +41,18 @@ require_once 'XML/HTMLSax3.php';
  *
  * <b>Example:</b>
  * <pre>
- * $parser =& new HTML_Safe();
+ * $parser = new HTML_Safe();
  * $result = $parser->parse($doc);
  * </pre>
  *
- * @category   HTML
- * @package    HTML_Safe
- * @author     Roman Ivanov <thingol@mail.ru>
- * @copyright  1997-2005 Roman Ivanov
- * @license    http://www.debian.org/misc/bsd.license  BSD License (3 Clause)
- * @version    Release: @package_version@
- * @link       http://pear.php.net/package/HTML_Safe
+ * @category  HTML
+ * @package   HTML_Safe
+ * @author    Roman Ivanov <thingol@mail.ru>
+ * @author    Miguel Vazquez Gocobachi <demrit@mx.gnu.org>
+ * @copyright 2004-2009 Roman Ivanov, Miguel Vazquez Gocobachi
+ * @license   http://www.debian.org/misc/bsd.license  BSD License (3 Clause)
+ * @version   Release: @package_version@
+ * @link      http://pear.php.net/package/HTML_Safe
  */
 class HTML_Safe
 {
@@ -61,7 +60,6 @@ class HTML_Safe
      * Storage for resulting HTML output
      *
      * @var string
-     * @access private
      */
     var $_xhtml = '';
 
@@ -69,7 +67,6 @@ class HTML_Safe
      * Array of counters for each tag
      *
      * @var array
-     * @access private
      */
     var $_counter = array();
 
@@ -77,7 +74,6 @@ class HTML_Safe
      * Stack of unclosed tags
      *
      * @var array
-     * @access private
      */
     var $_stack = array();
 
@@ -85,7 +81,6 @@ class HTML_Safe
      * Array of counters for tags that must be deleted with all content
      *
      * @var array
-     * @access private
      */
     var $_dcCounter = array();
 
@@ -93,7 +88,6 @@ class HTML_Safe
      * Stack of unclosed tags that must be deleted with all content
      *
      * @var array
-     * @access private
      */
     var $_dcStack = array();
 
@@ -101,7 +95,6 @@ class HTML_Safe
      * Stores level of list (ol/ul) nesting
      *
      * @var int
-     * @access private
      */
     var $_listScope = 0;
 
@@ -117,7 +110,6 @@ class HTML_Safe
      * Array of prepared regular expressions for protocols (schemas) matching
      *
      * @var array
-     * @access private
      */
     var $_protoRegexps = array();
 
@@ -125,7 +117,6 @@ class HTML_Safe
      * Array of prepared regular expressions for CSS matching
      *
      * @var array
-     * @access private
      */
     var $_cssRegexps = array();
 
@@ -133,7 +124,6 @@ class HTML_Safe
      * List of single tags ("<tag />")
      *
      * @var array
-     * @access public
      */
     var $singleTags = array('area', 'br', 'img', 'input', 'hr', 'wbr', );
 
@@ -141,7 +131,6 @@ class HTML_Safe
      * List of dangerous tags (such tags will be deleted)
      *
      * @var array
-     * @access public
      */
     var $deleteTags = array(
         'applet', 'base',   'basefont', 'bgsound', 'blink',  'body',
@@ -155,7 +144,6 @@ class HTML_Safe
      * inside this tags will be also removed)
      *
      * @var array
-     * @access public
      */
     var $deleteTagsContent = array('script', 'style', 'title', 'xml', );
 
@@ -163,7 +151,6 @@ class HTML_Safe
      * Type of protocols filtering ('white' or 'black')
      *
      * @var string
-     * @access public
      */
     var $protocolFiltering = 'white';
 
@@ -171,7 +158,6 @@ class HTML_Safe
      * List of "dangerous" protocols (used for blacklist-filtering)
      *
      * @var array
-     * @access public
      */
     var $blackProtocols = array(
         'about',   'chrome',     'data',       'disk',     'hcp',
@@ -185,7 +171,6 @@ class HTML_Safe
      * List of "safe" protocols (used for whitelist-filtering)
      *
      * @var array
-     * @access public
      */
     var $whiteProtocols = array(
         'ed2k',   'file', 'ftp',  'gopher', 'http',  'https',
@@ -197,7 +182,6 @@ class HTML_Safe
      * List of attributes that can contain protocols
      *
      * @var array
-     * @access public
      */
     var $protocolAttributes = array(
         'action', 'background', 'codebase', 'dynsrc', 'href', 'lowsrc', 'src',
@@ -210,7 +194,6 @@ class HTML_Safe
      * these keywords
      *
      * @var array
-     * @access public
      */
     var $cssKeywords = array(
         'absolute', 'behavior',       'behaviour',   'content', 'expression',
@@ -221,7 +204,6 @@ class HTML_Safe
      * List of tags that can have no "closing tag"
      *
      * @var array
-     * @access public
      * @deprecated XHTML does not allow such tags
      */
     var $noClose = array();
@@ -232,7 +214,6 @@ class HTML_Safe
      * Paragraph will be closed when this tags opened
      *
      * @var array
-     * @access public
      */
     var $closeParagraph = array(
         'address', 'blockquote', 'center', 'dd',      'dir',       'div',
@@ -246,7 +227,6 @@ class HTML_Safe
      * List of table tags, all table tags outside a table will be removed
      *
      * @var array
-     * @access public
      */
     var $tableTags = array(
         'caption', 'col', 'colgroup', 'tbody', 'td', 'tfoot', 'th',
@@ -257,7 +237,6 @@ class HTML_Safe
      * List of list tags
      *
      * @var array
-     * @access public
      */
     var $listTags = array('dir', 'menu', 'ol', 'ul', 'dl', );
 
@@ -265,7 +244,6 @@ class HTML_Safe
      * List of dangerous attributes
      *
      * @var array
-     * @access public
      */
     var $attributes = array('dynsrc', 'id', 'name', );
 
@@ -273,7 +251,6 @@ class HTML_Safe
      * List of allowed "namespaced" attributes
      *
      * @var array
-     * @access public
      */
     var $attributesNS = array('xml:lang', );
 
@@ -391,11 +368,11 @@ class HTML_Safe
     /**
      * Opening tag handler - called from HTMLSax
      *
-     * @param object $parser HTML Parser
-     * @param string $name   tag name
-     * @param array  $attrs  tag attributes
+     * @param object &$parser HTML Parser
+     * @param string $name    tag name
+     * @param array  $attrs   tag attributes
+     *
      * @return boolean
-     * @access private
      */
     function _openHandler(&$parser, $name, $attrs)
     {
@@ -465,14 +442,13 @@ class HTML_Safe
     /**
      * Closing tag handler - called from HTMLSax
      *
-     * @param object $parsers HTML parser
+     * @param object &$parser HTML parser
      * @param string $name    tag name
+     *
      * @return boolean
-     * @access private
      */
     function _closeHandler(&$parser, $name)
     {
-
         $name = strtolower($name);
 
         if (isset($this->_dcCounter[$name]) && ($this->_dcCounter[$name] > 0) &&
@@ -527,31 +503,33 @@ class HTML_Safe
     /**
      * Character data handler - called from HTMLSax
      *
-     * @param object $parser HTML parser
-     * @param string $data   textual data
+     * @param object &$parser HTML parser
+     * @param string $data    textual data
+     *
      * @return boolean
-     * @access private
      */
     function _dataHandler(&$parser, $data)
     {
         if (count($this->_dcStack) == 0) {
             $this->_xhtml .= $data;
         }
+
         return true;
     }
 
     /**
      * Escape handler - called from HTMLSax
      *
-     * @param object $parser HTML parser
-     * @param string $data   comments or other type of data
+     * @param object &$parser HTML parser
+     * @param string $data    comments or other type of data
+     *
      * @return boolean
-     * @access private
      */
     function _escapeHandler(&$parser, $data)
     {
         return true;
     }
+
     /**
      * Allow tags
      *
@@ -572,13 +550,10 @@ class HTML_Safe
         }
     }
 
-
-
     /**
      * Returns the XHTML document
      *
      * @return string Processed (X)HTML document
-     * @access public
      */
     function getXHTML ()
     {
@@ -593,7 +568,6 @@ class HTML_Safe
      * Clears current document data
      *
      * @return boolean
-     * @access public
      */
     function clear()
     {
@@ -605,8 +579,8 @@ class HTML_Safe
      * Main parsing fuction
      *
      * @param string $doc HTML document for processing
+     *
      * @return string Processed (X)HTML document
-     * @access public
      */
     function parse($doc)
     {
@@ -644,8 +618,8 @@ class HTML_Safe
      * UTF-7 decoding fuction
      *
      * @param string $str HTML document for recode ASCII part of UTF-7 back to ASCII
+     *
      * @return string Decoded document
-     * @access private
      */
     function repackUTF7($str)
     {
@@ -656,8 +630,8 @@ class HTML_Safe
      * Additional UTF-7 decoding fuction
      *
      * @param string $str String for recode ASCII part of UTF-7 back to ASCII
+     *
      * @return string Recoded string
-     * @access private
      */
     function repackUTF7Callback($str)
     {
@@ -670,8 +644,8 @@ class HTML_Safe
      * Additional UTF-7 encoding fuction
      *
      * @param string $str String for recode ASCII part of UTF-7 back to ASCII
+     *
      * @return string Recoded string
-     * @access private
      */
     function repackUTF7Back($str)
     {
@@ -686,5 +660,3 @@ class HTML_Safe
  * c-hanging-comment-ender-p: nil
  * End:
  */
-
-?>
