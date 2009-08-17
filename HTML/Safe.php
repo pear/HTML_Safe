@@ -61,64 +61,63 @@ class HTML_Safe
      *
      * @var string
      */
-    var $_xhtml = '';
+    protected $xhtml = '';
 
     /**
      * Array of counters for each tag
      *
      * @var array
      */
-    var $_counter = array();
+    protected $counter = array();
 
     /**
      * Stack of unclosed tags
      *
      * @var array
      */
-    var $_stack = array();
+    protected $stack = array();
 
     /**
      * Array of counters for tags that must be deleted with all content
      *
      * @var array
      */
-    var $_dcCounter = array();
+    protected $dcCounter = array();
 
     /**
      * Stack of unclosed tags that must be deleted with all content
      *
      * @var array
      */
-    var $_dcStack = array();
+    protected $dcStack = array();
 
     /**
      * Stores level of list (ol/ul) nesting
      *
      * @var int
      */
-    var $_listScope = 0;
+    protected $listScope = 0;
 
     /**
      * Stack of unclosed list tags
      *
      * @var array
-     * @access private
      */
-    var $_liStack = array();
+    protected $liStack = array();
 
     /**
      * Array of prepared regular expressions for protocols (schemas) matching
      *
      * @var array
      */
-    var $_protoRegexps = array();
+    protected $protoRegexps = array();
 
     /**
      * Array of prepared regular expressions for CSS matching
      *
      * @var array
      */
-    var $_cssRegexps = array();
+    protected $cssRegexps = array();
 
     /**
      * List of single tags ("<tag />")
@@ -268,17 +267,17 @@ class HTML_Safe
                 $preg .= $proto{$i} . "[\s\x01-\x1F]*";
             }
             $preg .= ":/i";
-            $this->_protoRegexps[] = $preg;
+            $this->protoRegexps[] = $preg;
         }
 
         foreach ($this->cssKeywords as $css) {
-            $this->_cssRegexps[] = '/' . $css . '/i';
+            $this->cssRegexps[] = '/' . $css . '/i';
         }
         return true;
     }
 
     /**
-     * Handles the writing of attributes - called from $this->_openHandler()
+     * Handles the writing of attributes - called from $this->openHandler()
      *
      * @param array $attrs array of attributes $name => $value
      * @return boolean
@@ -327,12 +326,12 @@ class HTML_Safe
                    $value = str_replace('&amp;', '&', $value);
                    $value = str_replace('&', '&amp;', $value);
 
-                   foreach ($this->_cssRegexps as $css) {
+                   foreach ($this->cssRegexps as $css) {
                        if (preg_match($css, $value)) {
                            continue 2;
                        }
                    }
-                   foreach ($this->_protoRegexps as $proto) {
+                   foreach ($this->protoRegexps as $proto) {
                        if (preg_match($proto, $value)) {
                            continue 2;
                        }
@@ -346,7 +345,7 @@ class HTML_Safe
                     (strpos($tempval, ':') !== false))
                 {
                     if ($this->protocolFiltering == 'black') {
-                        foreach ($this->_protoRegexps as $proto) {
+                        foreach ($this->protoRegexps as $proto) {
                             if (preg_match($proto, $tempval)) continue 2;
                         }
                     } else {
@@ -359,7 +358,7 @@ class HTML_Safe
                 }
 
                 $value = str_replace("\"", "&quot;", $value);
-                $this->_xhtml .= ' ' . $name . '="' . $value . '"';
+                $this->xhtml .= ' ' . $name . '="' . $value . '"';
             }
         }
         return true;
@@ -374,15 +373,15 @@ class HTML_Safe
      *
      * @return boolean
      */
-    public function _openHandler(&$parser, $name, $attrs)
+    public function openHandler(&$parser, $name, $attrs)
     {
         $name = strtolower($name);
 
         if (in_array($name, $this->deleteTagsContent)) {
-            array_push($this->_dcStack, $name);
-            $this->_dcCounter[$name] = isset($this->_dcCounter[$name]) ? $this->_dcCounter[$name]+1 : 1;
+            array_push($this->dcStack, $name);
+            $this->dcCounter[$name] = isset($this->dcCounter[$name]) ? $this->dcCounter[$name]+1 : 1;
         }
-        if (count($this->_dcStack) != 0) {
+        if (count($this->dcStack) != 0) {
             return true;
         }
 
@@ -392,50 +391,50 @@ class HTML_Safe
 
         if (!preg_match("/^[a-z0-9]+$/i", $name)) {
             if (preg_match("!(?:\@|://)!i", $name)) {
-                $this->_xhtml .= '&lt;' . $name . '&gt;';
+                $this->xhtml .= '&lt;' . $name . '&gt;';
             }
             return true;
         }
 
         if (in_array($name, $this->singleTags)) {
-            $this->_xhtml .= '<' . $name;
+            $this->xhtml .= '<' . $name;
             $this->_writeAttrs($attrs);
-            $this->_xhtml .= ' />';
+            $this->xhtml .= ' />';
             return true;
         }
 
         // TABLES: cannot open table elements when we are not inside table
-        if ((isset($this->_counter['table'])) && ($this->_counter['table'] <= 0)
+        if ((isset($this->counter['table'])) && ($this->counter['table'] <= 0)
             && (in_array($name, $this->tableTags)))
         {
             return true;
         }
 
         // PARAGRAPHS: close paragraph when closeParagraph tags opening
-        if ((in_array($name, $this->closeParagraph)) && (in_array('p', $this->_stack))) {
-            $this->_closeHandler($parser, 'p');
+        if ((in_array($name, $this->closeParagraph)) && (in_array('p', $this->stack))) {
+            $this->closeHandler($parser, 'p');
         }
 
         // LISTS: we should close <li> if <li> of the same level opening
-        if ($name == 'li' && count($this->_liStack) &&
-            $this->_listScope == $this->_liStack[count($this->_liStack)-1])
+        if ($name == 'li' && count($this->liStack) &&
+            $this->listScope == $this->liStack[count($this->liStack)-1])
         {
-            $this->_closeHandler($parser, 'li');
+            $this->closeHandler($parser, 'li');
         }
 
         // LISTS: we want to know on what nesting level of lists we are
         if (in_array($name, $this->listTags)) {
-            $this->_listScope++;
+            $this->listScope++;
         }
         if ($name == 'li') {
-            array_push($this->_liStack, $this->_listScope);
+            array_push($this->liStack, $this->listScope);
         }
 
-        $this->_xhtml .= '<' . $name;
+        $this->xhtml .= '<' . $name;
         $this->_writeAttrs($attrs);
-        $this->_xhtml .= '>';
-        array_push($this->_stack,$name);
-        $this->_counter[$name] = isset($this->_counter[$name]) ? $this->_counter[$name]+1 : 1;
+        $this->xhtml .= '>';
+        array_push($this->stack,$name);
+        $this->counter[$name] = isset($this->counter[$name]) ? $this->counter[$name]+1 : 1;
         return true;
     }
 
@@ -447,26 +446,26 @@ class HTML_Safe
      *
      * @return boolean
      */
-    public function _closeHandler(&$parser, $name)
+    public function closeHandler(&$parser, $name)
     {
         $name = strtolower($name);
 
-        if (isset($this->_dcCounter[$name]) && ($this->_dcCounter[$name] > 0) &&
+        if (isset($this->dcCounter[$name]) && ($this->dcCounter[$name] > 0) &&
             (in_array($name, $this->deleteTagsContent)))
         {
-           while ($name != ($tag = array_pop($this->_dcStack))) {
-            $this->_dcCounter[$tag]--;
+           while ($name != ($tag = array_pop($this->dcStack))) {
+            $this->dcCounter[$tag]--;
            }
 
-           $this->_dcCounter[$name]--;
+           $this->dcCounter[$name]--;
         }
 
-        if (count($this->_dcStack) != 0) {
+        if (count($this->dcStack) != 0) {
             return true;
         }
 
-        if ((isset($this->_counter[$name])) && ($this->_counter[$name] > 0)) {
-           while ($name != ($tag = array_pop($this->_stack))) {
+        if ((isset($this->counter[$name])) && ($this->counter[$name] > 0)) {
+           while ($name != ($tag = array_pop($this->stack))) {
                $this->_closeTag($tag);
            }
 
@@ -485,17 +484,17 @@ class HTML_Safe
     function _closeTag($tag)
     {
         if (!in_array($tag, $this->noClose)) {
-            $this->_xhtml .= '</' . $tag . '>';
+            $this->xhtml .= '</' . $tag . '>';
         }
 
-        $this->_counter[$tag]--;
+        $this->counter[$tag]--;
 
         if (in_array($tag, $this->listTags)) {
-            $this->_listScope--;
+            $this->listScope--;
         }
 
         if ($tag == 'li') {
-            array_pop($this->_liStack);
+            array_pop($this->liStack);
         }
         return true;
     }
@@ -508,10 +507,10 @@ class HTML_Safe
      *
      * @return boolean
      */
-    public function _dataHandler(&$parser, $data)
+    public function dataHandler(&$parser, $data)
     {
-        if (count($this->_dcStack) == 0) {
-            $this->_xhtml .= $data;
+        if (count($this->dcStack) == 0) {
+            $this->xhtml .= $data;
         }
 
         return true;
@@ -525,7 +524,7 @@ class HTML_Safe
      *
      * @return boolean
      */
-    public function _escapeHandler(&$parser, $data)
+    public function escapeHandler(&$parser, $data)
     {
         return true;
     }
@@ -557,11 +556,11 @@ class HTML_Safe
      */
     public function getXHTML()
     {
-        while ($tag = array_pop($this->_stack)) {
+        while ($tag = array_pop($this->stack)) {
             $this->_closeTag($tag);
         }
 
-        return $this->_xhtml;
+        return $this->xhtml;
     }
 
     /**
@@ -571,7 +570,7 @@ class HTML_Safe
      */
     public function clear()
     {
-        $this->_xhtml = '';
+        $this->xhtml = '';
         return true;
     }
 
@@ -603,9 +602,9 @@ class HTML_Safe
        // Set up the parser
        $parser->set_object($this);
 
-       $parser->set_element_handler('_openHandler','_closeHandler');
-       $parser->set_data_handler('_dataHandler');
-       $parser->set_escape_handler('_escapeHandler');
+       $parser->set_element_handler('openHandler','closeHandler');
+       $parser->set_data_handler('dataHandler');
+       $parser->set_escape_handler('escapeHandler');
 
        $parser->parse($doc);
 
