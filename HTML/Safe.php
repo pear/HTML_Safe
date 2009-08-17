@@ -374,7 +374,7 @@ class HTML_Safe
      *
      * @return boolean
      */
-    function _openHandler(&$parser, $name, $attrs)
+    public function _openHandler(&$parser, $name, $attrs)
     {
         $name = strtolower($name);
 
@@ -447,7 +447,7 @@ class HTML_Safe
      *
      * @return boolean
      */
-    function _closeHandler(&$parser, $name)
+    public function _closeHandler(&$parser, $name)
     {
         $name = strtolower($name);
 
@@ -508,7 +508,7 @@ class HTML_Safe
      *
      * @return boolean
      */
-    function _dataHandler(&$parser, $data)
+    public function _dataHandler(&$parser, $data)
     {
         if (count($this->_dcStack) == 0) {
             $this->_xhtml .= $data;
@@ -525,7 +525,7 @@ class HTML_Safe
      *
      * @return boolean
      */
-    function _escapeHandler(&$parser, $data)
+    public function _escapeHandler(&$parser, $data)
     {
         return true;
     }
@@ -621,9 +621,11 @@ class HTML_Safe
      *
      * @return string Decoded document
      */
-    function repackUTF7($str)
+    public function repackUTF7($str)
     {
-       return preg_replace_callback('!\+([0-9a-zA-Z/]+)\-!', array($this, 'repackUTF7Callback'), $str);
+        return preg_replace_callback('!\+([0-9a-zA-Z/]+)\-!',
+            array($this, 'repackUTF7Callback'),
+            $str);
     }
 
     /**
@@ -633,11 +635,14 @@ class HTML_Safe
      *
      * @return string Recoded string
      */
-    function repackUTF7Callback($str)
+    public function repackUTF7Callback($str)
     {
-       $str = base64_decode($str[1]);
-       $str = preg_replace_callback('/^((?:\x00.)*)((?:[^\x00].)+)/', array($this, 'repackUTF7Back'), $str);
-       return preg_replace('/\x00(.)/', '$1', $str);
+        $str = base64_decode($str[1]);
+        $str = preg_replace_callback('/^((?:\x00.)*)((?:[^\x00].)+)/',
+            array($this, 'repackUTF7Back'),
+            $str);
+
+        return preg_replace('/\x00(.)/', '$1', $str);
     }
 
     /**
@@ -647,9 +652,9 @@ class HTML_Safe
      *
      * @return string Recoded string
      */
-    function repackUTF7Back($str)
+    public function repackUTF7Back($str)
     {
-       return $str[1].'+'.rtrim(base64_encode($str[2]), '=').'-';
+        return $str[1] . '+' . rtrim(base64_encode($str[2]), '=') . '-';
     }
 }
 
