@@ -281,61 +281,65 @@ class HTML_Safe
      *
      * @param array $attrs array of attributes $name => $value
      * @return boolean
-     * @access private
      */
-    function _writeAttrs ($attrs)
+    protected function writeAttrs($attrs)
     {
         if (is_array($attrs)) {
             foreach ($attrs as $name => $value) {
-
                 $name = strtolower($name);
 
                 if (strpos($name, 'on') === 0) {
                     continue;
                 }
+
                 if (strpos($name, 'data') === 0) {
                     continue;
                 }
+
                 if (in_array($name, $this->attributes)) {
                     continue;
                 }
+
                 if (!preg_match("/^[a-z0-9]+$/i", $name)) {
                     if (!in_array($name, $this->attributesNS)) {
                         continue;
                     }
                 }
 
-                if (($value === TRUE) || (is_null($value))) {
+                if (($value === true) || (is_null($value))) {
                     $value = $name;
                 }
 
                 if ($name == 'style') {
+                    // removes insignificant backslahes
+                    $value = str_replace("\\", '', $value);
 
-                   // removes insignificant backslahes
-                   $value = str_replace("\\", '', $value);
+                    // removes CSS comments
+                    while (1) {
+                        $_value = preg_replace("!/\*.*?\*/!s", '', $value);
 
-                   // removes CSS comments
-                   while (1)
-                   {
-                     $_value = preg_replace("!/\*.*?\*/!s", '', $value);
-                     if ($_value == $value) break;
-                     $value = $_value;
-                   }
+                        if ($_value == $value) {
+                            break;
+                        }
 
-                   // replace all & to &amp;
-                   $value = str_replace('&amp;', '&', $value);
-                   $value = str_replace('&', '&amp;', $value);
+                        $value = $_value;
+                    }
 
-                   foreach ($this->cssRegexps as $css) {
-                       if (preg_match($css, $value)) {
-                           continue 2;
-                       }
-                   }
-                   foreach ($this->protoRegexps as $proto) {
-                       if (preg_match($proto, $value)) {
-                           continue 2;
-                       }
-                   }
+                    // replace all & to &amp;
+                    $value = str_replace('&amp;', '&', $value);
+                    $value = str_replace('&', '&amp;', $value);
+
+                    foreach ($this->cssRegexps as $css) {
+                        if (preg_match($css, $value)) {
+                            continue 2;
+                        }
+                    }
+
+                    foreach ($this->protoRegexps as $proto) {
+                        if (preg_match($proto, $value)) {
+                            continue 2;
+                        }
+                    }
                 }
 
                 $tempval = preg_replace('/&#(\d+);?/me', "chr('\\1')", $value); //"'
@@ -346,21 +350,25 @@ class HTML_Safe
                 {
                     if ($this->protocolFiltering == 'black') {
                         foreach ($this->protoRegexps as $proto) {
-                            if (preg_match($proto, $tempval)) continue 2;
+                            if (preg_match($proto, $tempval)) {
+                                continue 2;
+                            }
                         }
                     } else {
                         $_tempval = explode(':', $tempval);
-                        $proto = $_tempval[0];
+                        $proto    = $_tempval[0];
+
                         if (!in_array($proto, $this->whiteProtocols)) {
                             continue;
                         }
                     }
                 }
 
-                $value = str_replace("\"", "&quot;", $value);
+                $value        = str_replace("\"", '&quot;', $value);
                 $this->xhtml .= ' ' . $name . '="' . $value . '"';
             }
         }
+
         return true;
     }
 
@@ -398,7 +406,7 @@ class HTML_Safe
 
         if (in_array($name, $this->singleTags)) {
             $this->xhtml .= '<' . $name;
-            $this->_writeAttrs($attrs);
+            $this->writeAttrs($attrs);
             $this->xhtml .= ' />';
             return true;
         }
@@ -431,9 +439,9 @@ class HTML_Safe
         }
 
         $this->xhtml .= '<' . $name;
-        $this->_writeAttrs($attrs);
+        $this->writeAttrs($attrs);
         $this->xhtml .= '>';
-        array_push($this->stack,$name);
+        array_push($this->stack, $name);
         $this->counter[$name] = isset($this->counter[$name]) ? $this->counter[$name]+1 : 1;
         return true;
     }
@@ -453,11 +461,11 @@ class HTML_Safe
         if (isset($this->dcCounter[$name]) && ($this->dcCounter[$name] > 0) &&
             (in_array($name, $this->deleteTagsContent)))
         {
-           while ($name != ($tag = array_pop($this->dcStack))) {
-            $this->dcCounter[$tag]--;
-           }
+            while ($name != ($tag = array_pop($this->dcStack))) {
+                $this->dcCounter[$tag]--;
+            }
 
-           $this->dcCounter[$name]--;
+            $this->dcCounter[$name]--;
         }
 
         if (count($this->dcStack) != 0) {
@@ -465,11 +473,11 @@ class HTML_Safe
         }
 
         if ((isset($this->counter[$name])) && ($this->counter[$name] > 0)) {
-           while ($name != ($tag = array_pop($this->stack))) {
-               $this->_closeTag($tag);
-           }
+            while ($name != ($tag = array_pop($this->stack))) {
+                $this->closeTag($tag);
+            }
 
-           $this->_closeTag($name);
+            $this->closeTag($name);
         }
         return true;
     }
@@ -481,7 +489,7 @@ class HTML_Safe
      * @return boolean
      * @access private
      */
-    function _closeTag($tag)
+    protected function closeTag($tag)
     {
         if (!in_array($tag, $this->noClose)) {
             $this->xhtml .= '</' . $tag . '>';
@@ -557,7 +565,7 @@ class HTML_Safe
     public function getXHTML()
     {
         while ($tag = array_pop($this->stack)) {
-            $this->_closeTag($tag);
+            $this->closeTag($tag);
         }
 
         return $this->xhtml;
@@ -584,32 +592,31 @@ class HTML_Safe
     public function parse($doc)
     {
 
-       // Save all '<' symbols
-       $doc = preg_replace("/<(?=[^a-zA-Z\/\!\?\%])/", '&lt;', $doc);
+        // Save all '<' symbols
+        $doc = preg_replace("/<(?=[^a-zA-Z\/\!\?\%])/", '&lt;', $doc);
 
-       // Web documents shouldn't contains \x00 symbol
-       $doc = str_replace("\x00", '', $doc);
+        // Web documents shouldn't contains \x00 symbol
+        $doc = str_replace("\x00", '', $doc);
 
-       // Opera6 bug workaround
-       $doc = str_replace("\xC0\xBC", '&lt;', $doc);
+        // Opera6 bug workaround
+        $doc = str_replace("\xC0\xBC", '&lt;', $doc);
 
-       // UTF-7 encoding ASCII decode
-       $doc = $this->repackUTF7($doc);
+        // UTF-7 encoding ASCII decode
+        $doc = $this->repackUTF7($doc);
 
-       // Instantiate the parser
-       $parser=& new XML_HTMLSax3();
+        // Instantiate the parser
+        $parser=& new XML_HTMLSax3();
 
-       // Set up the parser
-       $parser->set_object($this);
+        // Set up the parser
+        $parser->set_object($this);
 
-       $parser->set_element_handler('openHandler','closeHandler');
-       $parser->set_data_handler('dataHandler');
-       $parser->set_escape_handler('escapeHandler');
+        $parser->set_element_handler('openHandler','closeHandler');
+        $parser->set_data_handler('dataHandler');
+        $parser->set_escape_handler('escapeHandler');
 
-       $parser->parse($doc);
+        $parser->parse($doc);
 
-       return $this->getXHTML();
-
+        return $this->getXHTML();
     }
 
 
