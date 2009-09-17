@@ -300,7 +300,7 @@ class HTML_Safe
                     continue;
                 }
 
-                if (!preg_match("/^[a-z0-9]+$/i", $name)) {
+                if (!preg_match('/^[a-z0-9]+$/i', $name)) {
                     if (!in_array($name, $this->attributesNS)) {
                         continue;
                     }
@@ -316,7 +316,7 @@ class HTML_Safe
 
                     // removes CSS comments
                     while (1) {
-                        $_value = preg_replace("!/\*.*?\*/!s", '', $value);
+                        $_value = preg_replace('!/\*.*?\*/!s', '', $value);
 
                         if ($_value == $value) {
                             break;
