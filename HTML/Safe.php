@@ -12,7 +12,7 @@
  * @author    Miguel Vazquez Gocobachi <demrit@mx.gnu.org>
  * @copyright 2004-2009 Roman Ivanov, Miguel Vazquez Gocobachi
  * @license   http://www.debian.org/misc/bsd.license  BSD License (3 Clause)
- * @version   CVS: $Id:$
+ * @version   SVN: $Id$
  * @link      http://pear.php.net/package/HTML_Safe
  */
 
@@ -118,6 +118,14 @@ class HTML_Safe
      * @var array
      */
     protected $cssRegexps = array();
+
+    /**
+     * Allowed tags
+     *
+     * @var array
+     */
+    protected $allowTags = array();
+
 
     /**
      * List of single tags ("<tag />")
@@ -280,6 +288,7 @@ class HTML_Safe
      * Handles the writing of attributes - called from $this->openHandler()
      *
      * @param array $attrs array of attributes $name => $value
+     *
      * @return boolean
      */
     protected function writeAttrs($attrs)
@@ -343,11 +352,15 @@ class HTML_Safe
                 }
 
                 $tempval = preg_replace('/&#(\d+);?/me', "chr('\\1')", $value); //"'
-                $tempval = preg_replace('/&#x([0-9a-f]+);?/mei', "chr(hexdec('\\1'))", $tempval);
+                $tempval = preg_replace(
+                    '/&#x([0-9a-f]+);?/mei',
+                    "chr(hexdec('\\1'))",
+                    $tempval
+                );
 
-                if ((in_array($name, $this->protocolAttributes)) &&
-                    (strpos($tempval, ':') !== false))
-                {
+                if ((in_array($name, $this->protocolAttributes))
+                    && (strpos($tempval, ':') !== false)
+                ) {
                     if ($this->protocolFiltering == 'black') {
                         foreach ($this->protoRegexps as $proto) {
                             if (preg_match($proto, $tempval)) {
@@ -387,13 +400,16 @@ class HTML_Safe
 
         if (in_array($name, $this->deleteTagsContent)) {
             array_push($this->dcStack, $name);
-            $this->dcCounter[$name] = isset($this->dcCounter[$name]) ? $this->dcCounter[$name]+1 : 1;
+            $this->dcCounter[$name] = isset($this->dcCounter[$name])
+                ? $this->dcCounter[$name]+1 : 1;
         }
         if (count($this->dcStack) != 0) {
             return true;
         }
 
-        if (in_array($name, $this->deleteTags)) {
+        if (in_array($name, $this->deleteTags)
+            && !in_array($name, $this->allowTags)
+        ) {
             return true;
         }
 
@@ -412,21 +428,25 @@ class HTML_Safe
         }
 
         // TABLES: cannot open table elements when we are not inside table
-        if ((isset($this->counter['table'])) && ($this->counter['table'] <= 0)
-            && (in_array($name, $this->tableTags)))
-        {
+        if ((isset($this->counter['table']))
+            && ($this->counter['table'] <= 0)
+            && (in_array($name, $this->tableTags))
+        ) {
             return true;
         }
 
         // PARAGRAPHS: close paragraph when closeParagraph tags opening
-        if ((in_array($name, $this->closeParagraph)) && (in_array('p', $this->stack))) {
+        if ((in_array($name, $this->closeParagraph))
+            && (in_array('p', $this->stack))
+        ) {
             $this->closeHandler($parser, 'p');
         }
 
         // LISTS: we should close <li> if <li> of the same level opening
-        if ($name == 'li' && count($this->liStack) &&
-            $this->listScope == $this->liStack[count($this->liStack)-1])
-        {
+        if (($name == 'li')
+            && count($this->liStack)
+            && ($this->listScope == $this->liStack[count($this->liStack)-1])
+        ) {
             $this->closeHandler($parser, 'li');
         }
 
@@ -442,7 +462,8 @@ class HTML_Safe
         $this->writeAttrs($attrs);
         $this->xhtml .= '>';
         array_push($this->stack, $name);
-        $this->counter[$name] = isset($this->counter[$name]) ? $this->counter[$name]+1 : 1;
+        $this->counter[$name] = isset($this->counter[$name])
+            ? $this->counter[$name]+1 : 1;
         return true;
     }
 
@@ -458,9 +479,10 @@ class HTML_Safe
     {
         $name = strtolower($name);
 
-        if (isset($this->dcCounter[$name]) && ($this->dcCounter[$name] > 0) &&
-            (in_array($name, $this->deleteTagsContent)))
-        {
+        if (isset($this->dcCounter[$name])
+            && ($this->dcCounter[$name] > 0)
+            && (in_array($name, $this->deleteTagsContent))
+        ) {
             while ($name != ($tag = array_pop($this->dcStack))) {
                 $this->dcCounter[$tag]--;
             }
@@ -486,8 +508,8 @@ class HTML_Safe
      * Closes tag
      *
      * @param string $tag tag name
+     *
      * @return boolean
-     * @access private
      */
     protected function closeTag($tag)
     {
@@ -553,7 +575,7 @@ class HTML_Safe
     public function setAllowTags($tags = array())
     {
         if (is_array($tags)) {
-            $this->_allowTags = $tags;
+            $this->allowTags = $tags;
         }
     }
 
@@ -610,7 +632,7 @@ class HTML_Safe
         // Set up the parser
         $parser->set_object($this);
 
-        $parser->set_element_handler('openHandler','closeHandler');
+        $parser->set_element_handler('openHandler', 'closeHandler');
         $parser->set_data_handler('dataHandler');
         $parser->set_escape_handler('escapeHandler');
 
@@ -629,9 +651,11 @@ class HTML_Safe
      */
     public function repackUTF7($str)
     {
-        return preg_replace_callback('!\+([0-9a-zA-Z/]+)\-!',
+        return preg_replace_callback(
+            '!\+([0-9a-zA-Z/]+)\-!',
             array($this, 'repackUTF7Callback'),
-            $str);
+            $str
+        );
     }
 
     /**
@@ -644,9 +668,11 @@ class HTML_Safe
     public function repackUTF7Callback($str)
     {
         $str = base64_decode($str[1]);
-        $str = preg_replace_callback('/^((?:\x00.)*)((?:[^\x00].)+)/',
+        $str = preg_replace_callback(
+            '/^((?:\x00.)*)((?:[^\x00].)+)/',
             array($this, 'repackUTF7Back'),
-            $str);
+            $str
+        );
 
         return preg_replace('/\x00(.)/', '$1', $str);
     }
@@ -663,11 +689,3 @@ class HTML_Safe
         return $str[1] . '+' . rtrim(base64_encode($str[2]), '=') . '-';
     }
 }
-
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * c-hanging-comment-ender-p: nil
- * End:
- */
