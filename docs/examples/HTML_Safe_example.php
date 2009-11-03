@@ -1,12 +1,6 @@
 <?php
 error_reporting(E_ALL);
-/*
-
-    Example for Safehtml
-
-*/
-
-define('XML_HTMLSAX3', dirname(__FILE__)."/classes/");
+define('XML_HTMLSAX3', dirname(__FILE__). '/classes/');
 ?>
 <html>
 <head>
@@ -41,33 +35,32 @@ if (isset($_POST["html"]))
 <input type="submit">
 </form>
 <?php
-require_once('classes/safehtml.php');
+require_once 'HTML/Safe.php';
 
-function getmicrotime(){ 
-  list($usec, $sec) = explode(" ",microtime()); 
-  return ((float)$usec + (float)$sec); 
+function getmicrotime()
+{ 
+    list($usec, $sec) = explode(" ", microtime());
+    return ((float) $usec + (float) $sec);
 }
 
-
-if (isset($_POST["html"])) 
-{
- $doc=$_POST["html"];
+if (isset($_POST['html'])) {
+ $doc = $_POST['html'];
 
  // Instantiate the handler
- $safehtml =& new safehtml();
+ $safehtml = new HTML_Safe();
 
- echo ('<pre>');
+ echo '<pre>';
  // Time HTMLSax
  $start = getmicrotime();
  $result = $safehtml->parse($doc);
- echo ( "Parsing took seconds:\t\t".(getmicrotime()-$start) );
- echo ('</pre>');
+ echo "Parsing took seconds:\t\t" . (getmicrotime() - $start);
+ echo '</pre>';
 
- echo ('<b>Source code after filtration:</b><br/>');
- echo ( htmlspecialchars($result) );
+ echo '<b>Source code after filtration:</b><br/>';
+ echo  htmlspecialchars($result);
 
- echo ('<p><b>Code after filtration as is (HTML):</b><br/>');
- echo ( $result );
+ echo '<p><b>Code after filtration as is (HTML):</b><br/>';
+ echo $result;
 }
 ?>
 <hr>
@@ -85,7 +78,7 @@ if (isset($_POST["html"]))
 <li> Christian Stocker
 <li> Nick Cleaton
 </ul>
-<hr /> <a href="http://pixel-apes.com/safehtml">Download Safehtml</a>.
+<hr /> <a href="http://pear.php.net/packages/HTML_Safe">Download HTML_Safe</a>.
 <br /> Copyright &copy; 2004-2005, Roman Ivanov.
 <br /> All rights reserved.
 

@@ -5,22 +5,16 @@
  <summary>This parser strips down all potentially dangerous content within HTML</summary>
  <description>This parser strips down all potentially dangerous content within HTML</description>
  <lead>
-  <name>Roman Ivanov</name>
-  <user>thingol</user>
-  <email>thingol@mail.ru</email>
-  <active>no</active>
+  <name>Miguel Vazquez Gocobachi</name>
+  <user>demrit</user>
+  <email>demrit@php.net</email>
+  <active>yes</active>
  </lead>
- <lead>
-  <name>Evgeny Stepanischev</name>
-  <user>bolk</user>
-  <email>bolk@lixil.ru</email>
-  <active>no</active>
- </lead>
- <date>2009-08-11</date>
- <time>00:59:30</time>
+ <date>2009-10-25</date>
+ <time>00:00:00</time>
  <version>
-  <release>0.9.9beta</release>
-  <api>0.9.9beta</api>
+  <release>0.1.0beta</release>
+  <api>0.1.0beta</api>
  </version>
  <stability>
   <release>beta</release>
@@ -28,9 +22,8 @@
  </stability>
  <license>BSD (3 Clause)</license>
  <notes>
-* Added &apos;dl&apos; to the list of &apos;lists&apos; tags.
-* Added &apos;callto&apos; to the white list of protocols.
-* Added white list of &quot;namespaced&quot; attributes.
+* Support for PHP 5.0+
+* Allowed tags with setAllowTags() method.
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
@@ -44,10 +37,10 @@
  <dependencies>
   <required>
    <php>
-    <min>4.1.0</min>
+    <min>5.2</min>
    </php>
    <pearinstaller>
-    <min>1.4.0b1</min>
+    <min>1.6</min>
    </pearinstaller>
    <package>
     <name>XML_HTMLSax3</name>
@@ -60,20 +53,19 @@
  <changelog>
   <release>
    <version>
-    <release>0.9.9beta</release>
-    <api>0.9.9beta</api>
+    <release>0.1.0beta</release>
+    <api>0.1.0beta</api>
    </version>
    <stability>
     <release>beta</release>
     <api>beta</api>
    </stability>
-   <date>2009-08-11</date>
+   <date>2009-10-25</date>
    <license>BSD (3 Clause)</license>
    <notes>
-* Added &apos;dl&apos; to the list of &apos;lists&apos; tags.
-* Added &apos;callto&apos; to the white list of protocols.
-* Added white list of &quot;namespaced&quot; attributes.
    </notes>
+* Support for PHP 5.0+
+* Allowed tags with setAllowTags() method.
   </release>
  </changelog>
 </package>
