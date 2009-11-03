@@ -27,10 +27,9 @@
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
-   <file baseinstalldir="/" md5sum="5bdeb7ab5474ab86389716053fbee2b9" name="docs/readme.txt" role="doc" />
-   <file baseinstalldir="/" md5sum="f7a5649b068abbb01cef98e6b9a47f8a" name="docs/examples/HTML_Safe_example.php" role="doc" />
-   <file baseinstalldir="/" md5sum="6c5dbc638e7a8416d56a8ee6e485fff0" name="HTML/Safe.php" role="php" />
-   <file baseinstalldir="/" md5sum="6f1fdcf8dbb68e213e98378390ab73aa" name="test/testHTML_Safe.php" role="test" />
+   <file baseinstalldir="/" md5sum="5bdeb7ab5474ab86389716053fbee2b9" name="docs/README" role="doc" />
+   <file baseinstalldir="/" md5sum="00bb35d326e00eb148d1e6d410e6837a" name="HTML/Safe.php" role="php" />
+   <file baseinstalldir="/" md5sum="ea8eb223fc4424b317f4c9953c09c978" name="tests/testHTML_Safe.php" role="test" />
   </dir>
  </contents>
  <dependencies>
