@@ -41,7 +41,7 @@ require_once 'XML/HTMLSax3.php';
  *
  * <b>Example:</b>
  * <pre>
- * $parser = new HTML_Safe();
+ * $parser = new HTML_Safe;
  * $result = $parser->parse($doc);
  * </pre>
  *
@@ -443,17 +443,17 @@ class HTML_Safe
         }
 
         // LISTS: we should close <li> if <li> of the same level opening
-        if (($name == 'li')
-            && count($this->liStack)
-            && ($this->listScope == $this->liStack[count($this->liStack)-1])
+        if (($name == 'li') && count($this->liStack)
+            && ($this->listScope == $this->liStack[count($this->liStack) - 1])
         ) {
             $this->closeHandler($parser, 'li');
         }
 
         // LISTS: we want to know on what nesting level of lists we are
         if (in_array($name, $this->listTags)) {
-            $this->listScope++;
+            ++$this->listScope;
         }
+
         if ($name == 'li') {
             array_push($this->liStack, $this->listScope);
         }
@@ -463,7 +463,8 @@ class HTML_Safe
         $this->xhtml .= '>';
         array_push($this->stack, $name);
         $this->counter[$name] = isset($this->counter[$name])
-            ? $this->counter[$name]+1 : 1;
+            ? ($this->counter[$name] + 1) : 1;
+
         return true;
     }
 
@@ -484,10 +485,10 @@ class HTML_Safe
             && (in_array($name, $this->deleteTagsContent))
         ) {
             while ($name != ($tag = array_pop($this->dcStack))) {
-                $this->dcCounter[$tag]--;
+                --$this->dcCounter[$tag];
             }
 
-            $this->dcCounter[$name]--;
+            --$this->dcCounter[$name];
         }
 
         if (count($this->dcStack) != 0) {
@@ -517,15 +518,16 @@ class HTML_Safe
             $this->xhtml .= '</' . $tag . '>';
         }
 
-        $this->counter[$tag]--;
+        --$this->counter[$tag];
 
         if (in_array($tag, $this->listTags)) {
-            $this->listScope--;
+            --$this->listScope;
         }
 
         if ($tag == 'li') {
             array_pop($this->liStack);
         }
+
         return true;
     }
 
@@ -644,6 +646,9 @@ class HTML_Safe
         // Opera6 bug workaround
         $doc = str_replace("\xC0\xBC", '&lt;', $doc);
 
+        // UTF7 pack
+        //$doc = $this->repackUTF7($doc);
+
         // Instantiate the parser
         $parser = new XML_HTMLSax3;
 
@@ -661,5 +666,43 @@ class HTML_Safe
         $this->clear();
 
         return $result;
+    }
+
+    /**
+     * UTF-7 decoding fuction
+     *
+     * @param string $str HTML document for recode ASCII part of UTF-7 back to ASCII
+     * @return string Decoded document
+     * @access private
+     */
+    function repackUTF7($str)
+    {
+       return preg_replace_callback('!\+([0-9a-zA-Z/]+)\-!', array($this, 'repackUTF7Callback'), $str);
+    }
+
+    /**
+     * Additional UTF-7 decoding fuction
+     *
+     * @param string $str String for recode ASCII part of UTF-7 back to ASCII
+     * @return string Recoded string
+     * @access private
+     */
+    function repackUTF7Callback($str)
+    {
+       $str = base64_decode($str[1]);
+       $str = preg_replace_callback('/^((?:\x00.)*)((?:[^\x00].)+)/', array($this, 'repackUTF7Back'), $str);
+       return preg_replace('/\x00(.)/', '$1', $str);
+    }
+
+    /**
+     * Additional UTF-7 encoding fuction
+     *
+     * @param string $str String for recode ASCII part of UTF-7 back to ASCII
+     * @return string Recoded string
+     * @access private
+     */
+    function repackUTF7Back($str)
+    {
+       return $str[1].'+'.rtrim(base64_encode($str[2]), '=').'-';
     }
 }
