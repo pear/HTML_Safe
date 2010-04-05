@@ -13,12 +13,12 @@
  <date>2009-11-04</date>
  <time>08:45:00</time>
  <version>
-  <release>0.10.0beta</release>
-  <api>0.10.0beta</api>
+  <release>0.10.0</release>
+  <api>0.10.0</api>
  </version>
  <stability>
-  <release>beta</release>
-  <api>beta</api>
+  <release>release</release>
+  <api>release</api>
  </stability>
  <license>BSD (3 Clause)</license>
  <notes>

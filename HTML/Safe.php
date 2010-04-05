@@ -613,6 +613,7 @@ class HTML_Safe
      */
     public function parse($doc)
     {
+        $result = '';
 
         // Save all '<' symbols
         $doc = preg_replace("/<(?=[^a-zA-Z\/\!\?\%])/", '&lt;', $doc);
@@ -623,11 +624,8 @@ class HTML_Safe
         // Opera6 bug workaround
         $doc = str_replace("\xC0\xBC", '&lt;', $doc);
 
-        // UTF-7 encoding ASCII decode
-        $doc = $this->repackUTF7($doc);
-
         // Instantiate the parser
-        $parser=& new XML_HTMLSax3();
+        $parser = new XML_HTMLSax3;
 
         // Set up the parser
         $parser->set_object($this);
@@ -638,54 +636,10 @@ class HTML_Safe
 
         $parser->parse($doc);
 
-        return $this->getXHTML();
-    }
+        $result = $this->getXHTML();
 
+        $this->clear();
 
-    /**
-     * UTF-7 decoding fuction
-     *
-     * @param string $str HTML document for recode ASCII part of UTF-7 back to ASCII
-     *
-     * @return string Decoded document
-     */
-    public function repackUTF7($str)
-    {
-        return preg_replace_callback(
-            '!\+([0-9a-zA-Z/]+)\-!',
-            array($this, 'repackUTF7Callback'),
-            $str
-        );
-    }
-
-    /**
-     * Additional UTF-7 decoding fuction
-     *
-     * @param string $str String for recode ASCII part of UTF-7 back to ASCII
-     *
-     * @return string Recoded string
-     */
-    public function repackUTF7Callback($str)
-    {
-        $str = base64_decode($str[1]);
-        $str = preg_replace_callback(
-            '/^((?:\x00.)*)((?:[^\x00].)+)/',
-            array($this, 'repackUTF7Back'),
-            $str
-        );
-
-        return preg_replace('/\x00(.)/', '$1', $str);
-    }
-
-    /**
-     * Additional UTF-7 encoding fuction
-     *
-     * @param string $str String for recode ASCII part of UTF-7 back to ASCII
-     *
-     * @return string Recoded string
-     */
-    public function repackUTF7Back($str)
-    {
-        return $str[1] . '+' . rtrim(base64_encode($str[2]), '=') . '-';
+        return $result;
     }
 }
