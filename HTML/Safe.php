@@ -580,6 +580,26 @@ class HTML_Safe
     }
 
     /**
+     * Returns the allowed tags
+     *
+     * @return array
+     */
+    public function getAllowTags()
+    {
+        return $this->allowTags;
+    }
+
+    /**
+     * Reset the allowed tags
+     *
+     * @return void
+     */
+    public function resetAllowTags()
+    {
+        $this->allowTags = array();
+    }
+
+    /**
      * Returns the XHTML document
      *
      * @return string Processed (X)HTML document
