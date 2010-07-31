@@ -640,21 +640,8 @@ class HTML_Safe
         // Save all '<' symbols
         $doc = preg_replace("/<(?=[^a-zA-Z\/\!\?\%])/", '&lt;', $doc);
 
-        // Known attack vector replacements
-        $doc = str_replace(array("\x00",     // Web documents shouldn't contain \x00 symbol
-                                 "\xC0\xBC", // Opera6 bug workaround
-                                 "+ADw-",    // UTF7 attack <
-                                 "+AD4-",    // UTF7 attack >
-                                 ),
-                           array('',
-                                 '&lt;',
-                                 '&lt;',
-                                 '&gt;',
-                                 ),
-                           $doc);
-
         // UTF7 pack
-        //$doc = $this->repackUTF7($doc);
+        $doc = $this->repackUTF7($doc);
 
         // Instantiate the parser
         $parser = new XML_HTMLSax3;
