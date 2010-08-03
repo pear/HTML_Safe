@@ -10,11 +10,11 @@
   <email>demrit@php.net</email>
   <active>yes</active>
  </lead>
- <date>2010-05-04</date>
- <time>16:40:00</time>
+ <date>2010-08-02</date>
+ <time>18:40:00</time>
  <version>
-  <release>0.10.0</release>
-  <api>0.10.0</api>
+  <release>0.10.1</release>
+  <api>0.10.1</api>
  </version>
  <stability>
   <release>beta</release>
@@ -22,14 +22,12 @@
  </stability>
  <license>BSD (3 Clause)</license>
  <notes>
-* Support for PHP 5.2+
-* Allowed tags with setAllowTags() method.
-* AllowTags can be disabled using resetAllowTags()
+* UTF-7 XSS vulnerability fixed
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
    <file baseinstalldir="/" md5sum="5bdeb7ab5474ab86389716053fbee2b9" name="docs/README" role="doc" />
-   <file baseinstalldir="/" md5sum="7d0b57df0cb0abb44ca403c5ec74fd23" name="HTML/Safe.php" role="php" />
+   <file baseinstalldir="/" md5sum="0a5fc1cd0f7e68c67993c5c165b10be2" name="HTML/Safe.php" role="php" />
    <file baseinstalldir="/" md5sum="209a048c9cba1a7c9f24ebcf0be2e309" name="tests/testHTML_Safe.php" role="test" />
   </dir>
  </contents>
@@ -52,20 +50,18 @@
  <changelog>
   <release>
    <version>
-    <release>0.10.0</release>
-    <api>0.10.0</api>
+    <release>0.10.1</release>
+    <api>0.10.1</api>
    </version>
    <stability>
     <release>beta</release>
     <api>beta</api>
    </stability>
-   <date>2010-05-04</date>
+   <date>2010-08-04</date>
    <license>BSD (3 Clause)</license>
    <notes>
    </notes>
-* Support for PHP 5.2+
-* Allowed tags with setAllowTags() method.
-* AllowTags can be disabled using resetAllowTags()
+* UTF-7 XSS vulnerability fixed
   </release>
  </changelog>
 </package>
