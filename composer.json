@@ -8,7 +8,7 @@
     ],
     "autoload": {
         "psr-0": {
-            "HTML_Safe": "./"
+            "HTML": "./"
         }
     },
     "description": "More info available on: http://pear.php.net/package/HTML_Safe",
@@ -23,7 +23,8 @@
     },
     "type": "library",
     "require": {
-        "pear/pear_exception": "*"
+        "pear/pear_exception": "*",
+        "pear/xml_htmlsax3": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "*"
