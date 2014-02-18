@@ -1,0 +1,32 @@
+{
+    "authors": [
+        {
+            "email": "demrit@php.net",
+            "name": "Miguel Vazquez Gocobachi",
+            "role": "Lead"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "HTML": "./"
+        }
+    },
+    "description": "More info available on: http://pear.php.net/package/HTML_Safe",
+    "include-path": [
+        "./"
+    ],
+    "license": "BSD (3 Clause)",
+    "name": "pear/html_safe",
+    "support": {
+        "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=HTML_Safe",
+        "source": "https://github.com/pear/HTML_Safe"
+    },
+    "type": "library",
+    "require": {
+        "pear/pear_exception": "*",
+        "pear/xml_htmlsax3": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    }
+}
