@@ -2,7 +2,7 @@
 require_once 'PHPUnit/Framework/TestCase.php';
 require_once 'HTML/Safe.php';
 
-class testHTML_Safe extends PHPUnit_Framework_TestCase
+class HTML_SafeTest extends PHPUnit_Framework_TestCase
 {
     public function testAllowTags()
     {
