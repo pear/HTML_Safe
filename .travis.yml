@@ -5,3 +5,5 @@ php:
   - hhvm
 install:
  - pear install package.xml
+script:
+ - phpunit tests
