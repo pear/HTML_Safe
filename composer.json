@@ -15,7 +15,7 @@
     "include-path": [
         "./"
     ],
-    "license": "BSD (3 Clause)",
+    "license": "BSD-3-Clause",
     "name": "pear/html_safe",
     "support": {
         "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=HTML_Safe",
