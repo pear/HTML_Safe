@@ -11,7 +11,7 @@ class HTML_SafeTest extends TestCase
         $input    = '<html><body><p>my text</p></body></html>';
         $expected = '<body><p>my text</p></body>';
 
-        $safe = new HTML_Safe;
+        $safe = new HTML_Safe();
         $safe->setAllowTags(array('body'));
         $this->assertSame($expected, $safe->parse($input));
     }
@@ -24,7 +24,7 @@ class HTML_SafeTest extends TestCase
         $inputTwo    = '+49-52 <br />';
         $expectedTwo = '+49-52 <br />';
 
-        $safe = new HTML_Safe;
+        $safe = new HTML_Safe();
         $this->assertSame($expectedOne, $safe->parse($inputOne));
         $this->assertSame($expectedTwo, $safe->parse($inputTwo));
     }

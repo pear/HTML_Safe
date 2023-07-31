@@ -41,7 +41,7 @@ require_once 'XML/HTMLSax3.php';
  *
  * <b>Example:</b>
  * <pre>
- * $parser = new HTML_Safe;
+ * $parser = new HTML_Safe();
  * $result = $parser->parse($doc);
  * </pre>
  *
@@ -320,7 +320,7 @@ class HTML_Safe
                 }
 
                 if ($name == 'style') {
-                    // removes insignificant backslahes
+                    // removes insignificant backslashes
                     $value = str_replace("\\", '', $value);
 
                     // removes CSS comments
@@ -351,7 +351,7 @@ class HTML_Safe
                     }
                 }
 
-                $tempval = preg_replace_callback('/&#(\d+);?/m', function ($matches) { return chr($matches[1]); }, $value); //"'
+                $tempval = preg_replace_callback('/&#(\d+);?/m', function ($matches) { return chr($matches[1]); }, $value);
                 $tempval = preg_replace_callback(
                     '/&#x([0-9a-f]+);?/mi',
                     function ($matches) { return chr(hexdec($matches[1])); },
@@ -566,7 +566,7 @@ class HTML_Safe
      *
      * Example:
      * <pre>
-     * $safe = new HTML_Safe;
+     * $safe = new HTML_Safe();
      * $safe->setAllowTags(array('body'));
      * </pre>
      *
@@ -644,7 +644,7 @@ class HTML_Safe
         $doc = $this->repackUTF7($doc);
 
         // Instantiate the parser
-        $parser = new XML_HTMLSax3;
+        $parser = new XML_HTMLSax3();
 
         // Set up the parser
         $parser->set_object($this);
