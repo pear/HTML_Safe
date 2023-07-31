@@ -1,4 +1,5 @@
 <?php
+
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
@@ -669,9 +670,9 @@ class HTML_Safe
      * @return string Decoded document
      * @access private
      */
-    function repackUTF7($str)
+    public function repackUTF7($str)
     {
-       return preg_replace_callback('!\+([0-9a-zA-Z/]+)\-!', array($this, 'repackUTF7Callback'), $str);
+        return preg_replace_callback('!\+([0-9a-zA-Z/]+)\-!', array($this, 'repackUTF7Callback'), $str);
     }
 
     /**
@@ -681,11 +682,11 @@ class HTML_Safe
      * @return string Recoded string
      * @access private
      */
-    function repackUTF7Callback($str)
+    public function repackUTF7Callback($str)
     {
-       $str = base64_decode($str[1]);
-       $str = preg_replace_callback('/^((?:\x00.)*)((?:[^\x00].)+)/', array($this, 'repackUTF7Back'), $str);
-       return preg_replace('/\x00(.)/', '$1', $str);
+        $str = base64_decode($str[1]);
+        $str = preg_replace_callback('/^((?:\x00.)*)((?:[^\x00].)+)/', array($this, 'repackUTF7Back'), $str);
+        return preg_replace('/\x00(.)/', '$1', $str);
     }
 
     /**
@@ -695,8 +696,8 @@ class HTML_Safe
      * @return string Recoded string
      * @access private
      */
-    function repackUTF7Back($str)
+    public function repackUTF7Back($str)
     {
-       return $str[1].'+'.rtrim(base64_encode($str[2]), '=').'-';
+        return $str[1].'+'.rtrim(base64_encode($str[2]), '=').'-';
     }
 }
