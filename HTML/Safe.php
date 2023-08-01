@@ -1,4 +1,5 @@
 <?php
+
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
@@ -41,7 +42,7 @@ require_once 'XML/HTMLSax3.php';
  *
  * <b>Example:</b>
  * <pre>
- * $parser = new HTML_Safe;
+ * $parser = new HTML_Safe();
  * $result = $parser->parse($doc);
  * </pre>
  *
@@ -320,7 +321,7 @@ class HTML_Safe
                 }
 
                 if ($name == 'style') {
-                    // removes insignificant backslahes
+                    // removes insignificant backslashes
                     $value = str_replace("\\", '', $value);
 
                     // removes CSS comments
@@ -351,7 +352,7 @@ class HTML_Safe
                     }
                 }
 
-                $tempval = preg_replace_callback('/&#(\d+);?/m', function ($matches) { return chr($matches[1]); }, $value); //"'
+                $tempval = preg_replace_callback('/&#(\d+);?/m', function ($matches) { return chr($matches[1]); }, $value);
                 $tempval = preg_replace_callback(
                     '/&#x([0-9a-f]+);?/mi',
                     function ($matches) { return chr(hexdec($matches[1])); },
@@ -566,7 +567,7 @@ class HTML_Safe
      *
      * Example:
      * <pre>
-     * $safe = new HTML_Safe;
+     * $safe = new HTML_Safe();
      * $safe->setAllowTags(array('body'));
      * </pre>
      *
@@ -644,7 +645,7 @@ class HTML_Safe
         $doc = $this->repackUTF7($doc);
 
         // Instantiate the parser
-        $parser = new XML_HTMLSax3;
+        $parser = new XML_HTMLSax3();
 
         // Set up the parser
         $parser->set_object($this);
@@ -669,9 +670,9 @@ class HTML_Safe
      * @return string Decoded document
      * @access private
      */
-    function repackUTF7($str)
+    public function repackUTF7($str)
     {
-       return preg_replace_callback('!\+([0-9a-zA-Z/]+)\-!', array($this, 'repackUTF7Callback'), $str);
+        return preg_replace_callback('!\+([0-9a-zA-Z/]+)\-!', array($this, 'repackUTF7Callback'), $str);
     }
 
     /**
@@ -681,11 +682,11 @@ class HTML_Safe
      * @return string Recoded string
      * @access private
      */
-    function repackUTF7Callback($str)
+    public function repackUTF7Callback($str)
     {
-       $str = base64_decode($str[1]);
-       $str = preg_replace_callback('/^((?:\x00.)*)((?:[^\x00].)+)/', array($this, 'repackUTF7Back'), $str);
-       return preg_replace('/\x00(.)/', '$1', $str);
+        $str = base64_decode($str[1]);
+        $str = preg_replace_callback('/^((?:\x00.)*)((?:[^\x00].)+)/', array($this, 'repackUTF7Back'), $str);
+        return preg_replace('/\x00(.)/', '$1', $str);
     }
 
     /**
@@ -695,8 +696,8 @@ class HTML_Safe
      * @return string Recoded string
      * @access private
      */
-    function repackUTF7Back($str)
+    public function repackUTF7Back($str)
     {
-       return $str[1].'+'.rtrim(base64_encode($str[2]), '=').'-';
+        return $str[1].'+'.rtrim(base64_encode($str[2]), '=').'-';
     }
 }
