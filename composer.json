@@ -1,4 +1,8 @@
 {
+    "name": "pear/html_safe",
+    "description": "HTML_Safe - Parser that strips down all potentially dangerous content within HTML. More info available on: https://pear.php.net/package/HTML_Safe",
+    "type": "library",
+    "license": "BSD-3-Clause",
     "authors": [
         {
             "email": "demrit@php.net",
@@ -6,27 +10,24 @@
             "role": "Lead"
         }
     ],
-    "autoload": {
-        "psr-0": {
-            "HTML": "./"
-        }
-    },
-    "description": "More info available on: http://pear.php.net/package/HTML_Safe",
-    "include-path": [
-        "./"
-    ],
-    "license": "BSD-3-Clause",
-    "name": "pear/html_safe",
     "support": {
-        "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=HTML_Safe",
+        "issues": "https://pear.php.net/bugs/search.php?cmd=display&package_name[]=HTML_Safe",
         "source": "https://github.com/pear/HTML_Safe"
     },
-    "type": "library",
     "require": {
+        "php": ">=5.2",
         "pear/pear_exception": "*",
         "pear/xml_htmlsax3": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "*"
-    }
+    },
+    "autoload": {
+        "psr-0": {
+            "HTML": "./"
+        }
+    },
+    "include-path": [
+        "./"
+    ]
 }
