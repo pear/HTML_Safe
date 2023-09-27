@@ -1,6 +1,11 @@
 <?php
 
-require_once 'PHPUnit/Framework/TestCase.php';
+// Include PHPUnit using composer
+if (is_readable('vendor/autoload.php')) {
+    require_once 'vendor/autoload.php';
+} else {
+    require_once 'PHPUnit/Framework/TestCase.php';
+}
 require_once 'HTML/Safe.php';
 
 use PHPUnit\Framework\TestCase;
