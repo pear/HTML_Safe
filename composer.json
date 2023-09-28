@@ -15,7 +15,7 @@
         "source": "https://github.com/pear/HTML_Safe"
     },
     "require": {
-        "php": ">=5.2",
+        "php": ">=5.3.3",
         "pear/pear_exception": "*",
         "pear/xml_htmlsax3": "*"
     },
