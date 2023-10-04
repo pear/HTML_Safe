@@ -17,10 +17,10 @@
     "require": {
         "php": ">=5.3.3",
         "pear/pear_exception": "*",
-        "pear/xml_htmlsax3": "*"
+        "g-scalvini/xml_htmlsax3": "^4.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "*"
+        "phpunit/phpunit": "^4.8"
     },
     "autoload": {
         "psr-0": {
